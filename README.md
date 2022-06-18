@@ -1,6 +1,6 @@
 
 
-# MySmartBike
+# MySmartBike - DEV in progress - NO WORKING Version yet
 [![HassFest tests](https://github.com/renenulschde/ha-mysmartbike/workflows/Validate%20with%20hassfest/badge.svg)](https://developers.home-assistant.io/blog/2020/04/16/hassfest)![Validate with HACS](https://github.com/ReneNulschDE/ha-mysmartbike/workflows/Validate%20with%20HACS/badge.svg)
 
 
@@ -14,7 +14,9 @@ IMPORTANT:
 
 ### Installation
 * First: This is not a Home Assistant Add-On. It's a custom component.
-* There are two ways to install. First you can download the folder custom_component and copy it into your Home-Assistant config folder. Second option is to install HACS (Home Assistant Custom Component Store) and select "MercedesME 2020" from the Integrations catalog.
+
+* There is no way to install as the code is not completed yet
+
 * [How to install a custom component?](https://www.google.com/search?q=how+to+install+custom+components+home+assistant) 
 * [How to install HACS?](https://hacs.xyz/docs/installation/prerequisites)
 ### Configuration

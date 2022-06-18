@@ -1,0 +1,5 @@
+{
+    "name": "MySmartBike",
+    "domains": ["sensor", "device_tracker"],
+    "iot_class": "Cloud Pull"
+}

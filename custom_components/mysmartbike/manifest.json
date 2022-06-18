@@ -1,0 +1,14 @@
+{
+  "domain": "mysmartbike",
+  "name": "MySmartBike",
+  "config_flow": true,
+  "documentation": "https://github.com/ReneNulschDE/ha-mysmartbike",
+  "issue_tracker": "https://github.com/ReneNulschDE/ha-mysmartbike/issues",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": [
+    "@ReneNulschDE"
+  ],
+  "version": "0.0.1",
+  "iot_class": "cloud_pull"
+}

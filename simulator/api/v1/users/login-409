@@ -1,0 +1,1 @@
+{"status":409,"code":"LOGIN_ATTEMPTS_EXCEEDED","success":false,"data":[{"msg":"Sie haben die Anzahl der fehlgeschlagenen Anmeldeversuche überschritten (5). Versuchen Sie es innerhalb von 10 Minuten erneut."}]}

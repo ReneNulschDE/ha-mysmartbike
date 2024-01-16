@@ -1,5 +1,7 @@
 {
-    "name": "MySmartBike",
-    "domains": ["sensor", "device_tracker"],
-    "iot_class": "Cloud Pull"
+  "name": "MySmartBike",
+  "domains": ["sensor", "device_tracker"],
+  "render_readme": true,
+  "zip_release": false,
+  "filename": "ha_mysmartbike.zip"
 }

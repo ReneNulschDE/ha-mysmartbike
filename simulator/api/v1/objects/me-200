@@ -1,0 +1,305 @@
+{
+    "status": 200,
+    "code": "OK",
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "serial": "1",
+            "object_status": "SOLD",
+            "diagnosis_status": "ACTIVE",
+            "manufacture_date": "2022-05-10 11:18:35",
+            "activation_date": "2022-06-11 06:55:12",
+            "connection_uuid": "1eb305c7-88d1-4347-a34f-811fcf997238",
+            "odometry": 496500,
+            "longitude": 12.348000000007125,
+            "latitude": 51.34950000004572,
+            "last_position_date": "2022-06-18 18:40:30",
+            "diagnosed": true,
+            "diagnosed_at": "2023-06-18 18:40:30",
+            "user_count": 1,
+            "error_count": 2,
+            "active_error_count": 0,
+            "object_model": {
+                "id": 520,
+                "model_name": "Arthur IX",
+                "model_year": 2021,
+                "segment": "URBAN",
+                "drive_system": "X35",
+                "wheel_length": 2183,
+                "presets": {
+                    "sport": {
+                        "eco": 60,
+                        "boost": 100,
+                        "power": 80
+                    },
+                    "urban": {
+                        "eco": 40,
+                        "boost": 90,
+                        "power": 70
+                    },
+                    "efficient": {
+                        "eco": 30,
+                        "boost": 65,
+                        "power": 42
+                    }
+                },
+                "diagnosable": false,
+                "master": false,
+                "odometry": false,
+                "object_type": {
+                    "id": 1,
+                    "object_type_name": "Bicycle",
+                    "alias": "bicycle",
+                    "is_root": true,
+                    "settings": {
+                        "activity_minSpeed": 8,
+                        "activity_minDistance": 20,
+                        "activity_maxAcceleration": 1,
+                        "activity_maxSpeedPercentage": 20
+                    },
+                    "resource": "https://my-smartbike.com/resources/object-types/object-type-1.png?date=20240105084438"
+                },
+                "resource": "https://my-smartbike.com/resources/object-models/object-model-520.png?date=20211218153559",
+                "brand": {
+                    "id": 9,
+                    "parent_id": 1,
+                    "alias": "Schindelhauer",
+                    "prefix": "SB",
+                    "brand_name": "Schindelhauer",
+                    "email_technical": "service@schindelhauerbikes.com",
+                    "email_commercial": "info@schindelhauerbikes.com",
+                    "dns": "schindelhauer.my-smartbike.com",
+                    "theme": {
+                        "card_bg": "#323338",
+                        "primary": "#323338",
+                        "card_text": "#FFFFFF",
+                        "primary_dark": "#E6E6FF",
+                        "card_inverse_logo": true
+                    },
+                    "resources": {
+                        "logo": "https://my-smartbike.com/resources/brands/Schindelhauer_logo.png?date=20210128122837",
+                        "logo_inverse": "https://my-smartbike.com/resources/brands/Schindelhauer_logo_inverse.png?date=20210128122840",
+                        "logo_mini": "https://my-smartbike.com/resources/brands/Schindelhauer_logo_mini.png?date=20210812182256",
+                        "login_bg_1": "https://my-smartbike.com/resources/brands/Schindelhauer_login_bg_1.jpg?date=20210812182304",
+                        "login_bg_2": "https://my-smartbike.com/resources/brands/Schindelhauer_login_bg_2.jpg?date=20210812182306",
+                        "login_bg_3": "https://my-smartbike.com/resources/brands/Schindelhauer_login_bg_3.jpg?date=20210812182308",
+                        "login_screen": "https://my-smartbike.com/resources/brands/Schindelhauer_login_screen.jpg?date=20210812182259"
+                    }
+                },
+                "presets_v2": {
+                    "modes": [
+                        {
+                            "name": "efficient",
+                            "levels": [
+                                {
+                                    "level": 1,
+                                    "peak_power": 30
+                                },
+                                {
+                                    "level": 2,
+                                    "peak_power": 42
+                                },
+                                {
+                                    "level": 3,
+                                    "peak_power": 65
+                                }
+                            ]
+                        },
+                        {
+                            "name": "urban",
+                            "levels": [
+                                {
+                                    "level": 1,
+                                    "peak_power": 40
+                                },
+                                {
+                                    "level": 2,
+                                    "peak_power": 70
+                                },
+                                {
+                                    "level": 3,
+                                    "peak_power": 90
+                                }
+                            ]
+                        },
+                        {
+                            "name": "sport",
+                            "levels": [
+                                {
+                                    "level": 1,
+                                    "peak_power": 60
+                                },
+                                {
+                                    "level": 2,
+                                    "peak_power": 80
+                                },
+                                {
+                                    "level": 3,
+                                    "peak_power": 100
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "thumbnail": "https://my-smartbike.com/resources/object-models/object-model-520-thumbnail.png?date=20211218153559"
+            },
+            "object_tree": [
+                {
+                    "id": 2,
+                    "parent_id": 1,
+                    "serial": "2",
+                    "firmware": "48",
+                    "object_status": "SOLD",
+                    "diagnosis_status": "ACTIVE",
+                    "manufacture_date": "2022-05-10 11:18:35",
+                    "activation_date": "2022-06-11 06:55:12",
+                    "diagnosed": false,
+                    "remaining_capacity": 190.7,
+                    "object_model": {
+                        "id": 1038,
+                        "object_type": {
+                            "id": 8,
+                            "object_type_name": "Battery",
+                            "alias": "battery",
+                            "is_root": false,
+                            "resource": "https://my-smartbike.com/resources/object-types/object-type-8.png?date=20200723173545"
+                        },
+                        "resource": "https://my-smartbike.com/resources/object-models/object-model-1038.png?date=20211218153638",
+                        "brand": {
+                            "id": 1,
+                            "alias": "MAHLE",
+                            "prefix": "EM",
+                            "brand_name": "MAHLE",
+                            "email_technical": "mahle.support@heloo.com",
+                            "email_commercial": "mahle.support@heloo.com",
+                            "company_name": "MAHLE Smartbike Systems SLU",
+                            "theme": {
+                                "card_bg": "#003478",
+                                "primary": "#003478",
+                                "card_text": "#FFFFFF",
+                                "primary_dark": "#1d78c5",
+                                "card_inverse_logo": true
+                            },
+                            "resources": {
+                                "logo": "https://my-smartbike.com/resources/brands/MAHLE_logo.png?date=20210127104459",
+                                "logo_inverse": "https://my-smartbike.com/resources/brands/MAHLE_logo_inverse.png?date=20210127104459",
+                                "logo_mini": "https://my-smartbike.com/resources/brands/MAHLE_logo_mini.png?date=20210127104459",
+                                "login_bg_1": "https://my-smartbike.com/media/images/brands/login_bg_1.jpg",
+                                "login_bg_2": "https://my-smartbike.com/media/images/brands/login_bg_2.jpg",
+                                "login_bg_3": "https://my-smartbike.com/media/images/brands/login_bg_3.jpg",
+                                "login_bg_4": "https://my-smartbike.com/media/images/brands/login_bg_4.jpg",
+                                "login_bg_5": "https://my-smartbike.com/media/images/brands/login_bg_5.jpg"
+                            }
+                        },
+                        "thumbnail": "https://my-smartbike.com/resources/object-models/object-model-1038-thumbnail.png?date=20211218153638"
+                    },
+                    "state_of_charge": 78
+                },
+                {
+                    "id": 3,
+                    "parent_id": 1,
+                    "serial": "3",
+                    "firmware": "iM2EM126",
+                    "object_status": "SOLD",
+                    "diagnosis_status": "ACTIVE",
+                    "manufacture_date": "2022-05-10 11:18:35",
+                    "activation_date": "2022-06-11 06:55:12",
+                    "diagnosed": true,
+                    "diagnosed_at": "2023-06-18 18:40:30",
+                    "object_model": {
+                        "id": 1175,
+                        "object_type": {
+                            "id": 6,
+                            "object_type_name": "Joystick",
+                            "alias": "joystick",
+                            "is_root": false,
+                            "resource": "https://my-smartbike.com/resources/object-types/object-type-6.png?date=20200723173630"
+                        },
+                        "resource": "https://my-smartbike.com/resources/object-models/object-model-1175.png?date=20211218153719",
+                        "brand": {
+                            "id": 1,
+                            "alias": "MAHLE",
+                            "prefix": "EM",
+                            "brand_name": "MAHLE",
+                            "email_technical": "mahle.support@heloo.com",
+                            "email_commercial": "mahle.support@heloo.com",
+                            "company_name": "MAHLE Smartbike Systems SLU",
+                            "theme": {
+                                "card_bg": "#003478",
+                                "primary": "#003478",
+                                "card_text": "#FFFFFF",
+                                "primary_dark": "#1d78c5",
+                                "card_inverse_logo": true
+                            },
+                            "resources": {
+                                "logo": "https://my-smartbike.com/resources/brands/MAHLE_logo.png?date=20210127104459",
+                                "logo_inverse": "https://my-smartbike.com/resources/brands/MAHLE_logo_inverse.png?date=20210127104459",
+                                "logo_mini": "https://my-smartbike.com/resources/brands/MAHLE_logo_mini.png?date=20210127104459",
+                                "login_bg_1": "https://my-smartbike.com/media/images/brands/login_bg_1.jpg",
+                                "login_bg_2": "https://my-smartbike.com/media/images/brands/login_bg_2.jpg",
+                                "login_bg_3": "https://my-smartbike.com/media/images/brands/login_bg_3.jpg",
+                                "login_bg_4": "https://my-smartbike.com/media/images/brands/login_bg_4.jpg",
+                                "login_bg_5": "https://my-smartbike.com/media/images/brands/login_bg_5.jpg"
+                            }
+                        },
+                        "thumbnail": "https://my-smartbike.com/resources/object-models/object-model-1175-thumbnail.png?date=20211218153719"
+                    }
+                },
+                {
+                    "id": 4,
+                    "parent_id": 1,
+                    "serial": "4",
+                    "firmware": "4107",
+                    "object_status": "SOLD",
+                    "diagnosis_status": "ACTIVE",
+                    "manufacture_date": "2022-05-10 11:18:35",
+                    "activation_date": "2022-06-11 06:55:12",
+                    "diagnosed": true,
+                    "diagnosed_at": "2023-06-18 18:40:30",
+                    "object_model": {
+                        "id": 1174,
+                        "object_type": {
+                            "id": 4,
+                            "object_type_name": "Controller",
+                            "alias": "controller",
+                            "is_root": false,
+                            "resource": "https://my-smartbike.com/resources/object-types/object-type-4.png?date=20200723173612"
+                        },
+                        "resource": "https://my-smartbike.com/resources/object-models/object-model-1174.png?date=20211218153718",
+                        "brand": {
+                            "id": 1,
+                            "alias": "MAHLE",
+                            "prefix": "EM",
+                            "brand_name": "MAHLE",
+                            "email_technical": "mahle.support@heloo.com",
+                            "email_commercial": "mahle.support@heloo.com",
+                            "company_name": "MAHLE Smartbike Systems SLU",
+                            "theme": {
+                                "card_bg": "#003478",
+                                "primary": "#003478",
+                                "card_text": "#FFFFFF",
+                                "primary_dark": "#1d78c5",
+                                "card_inverse_logo": true
+                            },
+                            "resources": {
+                                "logo": "https://my-smartbike.com/resources/brands/MAHLE_logo.png?date=20210127104459",
+                                "logo_inverse": "https://my-smartbike.com/resources/brands/MAHLE_logo_inverse.png?date=20210127104459",
+                                "logo_mini": "https://my-smartbike.com/resources/brands/MAHLE_logo_mini.png?date=20210127104459",
+                                "login_bg_1": "https://my-smartbike.com/media/images/brands/login_bg_1.jpg",
+                                "login_bg_2": "https://my-smartbike.com/media/images/brands/login_bg_2.jpg",
+                                "login_bg_3": "https://my-smartbike.com/media/images/brands/login_bg_3.jpg",
+                                "login_bg_4": "https://my-smartbike.com/media/images/brands/login_bg_4.jpg",
+                                "login_bg_5": "https://my-smartbike.com/media/images/brands/login_bg_5.jpg"
+                            }
+                        },
+                        "thumbnail": "https://my-smartbike.com/resources/object-models/object-model-1174-thumbnail.png?date=20211218153718"
+                    }
+                }
+            ]
+        }
+    ],
+    "offset": 0,
+    "limit": 5,
+    "total": 1
+}

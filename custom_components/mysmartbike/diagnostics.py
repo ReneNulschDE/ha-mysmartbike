@@ -1,25 +1,28 @@
-"""Diagnostics support for HACS."""
+"""Diagnostics support for AccuWeather."""
 from __future__ import annotations
-import json
+
 from typing import Any
 
 from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
+from .coordinator import MySmartBikeDataUpdateCoordinator
+
+TO_REDACT = {CONF_USERNAME, CONF_PASSWORD}
 
 
 async def async_get_config_entry_diagnostics(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
+    hass: HomeAssistant, config_entry: ConfigEntry
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
-    domain = hass.data[DOMAIN]
+    coordinator: MySmartBikeDataUpdateCoordinator = hass.data[DOMAIN][config_entry.entry_id]
 
-    data = {
-        "entry": entry.as_dict(),
-        "cars" : json.dumps(domain.client.bikes)
+    diagnostics_data = {
+        "config_entry_data": async_redact_data(dict(config_entry.options), TO_REDACT),
+        "coordinator_data": coordinator.data,
     }
 
-    return async_redact_data(data, ("password", "access_token", "refresh_token", "username", "unique_id"))
+    return diagnostics_data

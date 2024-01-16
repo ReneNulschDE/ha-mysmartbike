@@ -1,64 +1,155 @@
-"""
-Sensor support for bikes with MySmartBike app.
+"""Sensor support for bikes with MySmartBike app.
 
 For more details about this component, please refer to the documentation at
 https://github.com/ReneNulschDE/ha-mysmartbike/
 """
+from __future__ import annotations
+
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import datetime
 import logging
+from typing import Any, cast
 
-from homeassistant.helpers.restore_state import RestoreEntity
-
-from . import MySmartBikeEntity
-
-from .const import (
-    DOMAIN,
-    SENSORS
+from homeassistant import util
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorEntityDescription,
+    SensorStateClass,
 )
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import PERCENTAGE, UnitOfLength
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
+
+from .const import DOMAIN
+from .coordinator import MySmartBikeDataUpdateCoordinator
+from .device import MySmartBikeDevice
 
 LOGGER = logging.getLogger(__name__)
 
-async def async_setup_entry(hass, entry, async_add_entities):
-    """Setup the sensor platform."""
 
-    data = hass.data[DOMAIN]
+@dataclass(frozen=True)
+class MySmartBikeSensorDescriptionMixin:
+    """Mixin for MySmartBike sensor."""
 
-    if not data.client.bikes:
-        LOGGER.info("No Bikes found.")
-        return
-
-    sensor_list = []
-    for bike in data.client.bikes:
-
-        for key, value in sorted(SENSORS.items()):
-            device = MySmartBikeSensor(
-                hass=hass,
-                data=data,
-                internal_name = key,
-                sensor_config = value,
-                vin = bike.finorvin
-                )
-            sensor_list.append(device)
-
-    async_add_entities(sensor_list, True)
+    value_fn: Callable[[dict[str, Any]], str | int | float | datetime | None]
 
 
+@dataclass(frozen=True)
+class MySmartBikeSensorDescription(SensorEntityDescription, MySmartBikeSensorDescriptionMixin):
+    """Class describing MySmartBike sensor entities."""
+
+    exists_fn: Callable[[MySmartBikeDevice], bool] = lambda _: True
+    attr_fn: Callable[[Any | None], dict[str, Any]] = lambda _: {}
 
 
-class MySmartBikeSensor(MySmartBikeEntity, RestoreEntity):
-    """Representation of a Sensor."""
+SENSORS: tuple[MySmartBikeSensorDescription, ...] = (
+    MySmartBikeSensorDescription(
+        key="odometry",
+        native_unit_of_measurement=UnitOfLength.METERS,
+        suggested_unit_of_measurement=UnitOfLength.KILOMETERS,
+        device_class=SensorDeviceClass.DISTANCE,
+        state_class=SensorStateClass.MEASUREMENT,
+        translation_key="odometry",
+        value_fn=lambda data: cast(int, data),
+        exists_fn=lambda device: bool(device.odometry),
+    ),  # type: ignore[call-arg]
+    MySmartBikeSensorDescription(
+        key="state_of_charge",
+        translation_key="state_of_charge",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.BATTERY,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: cast(int, data),
+        exists_fn=lambda device: bool(device.state_of_charge),
+    ),  # type: ignore[call-arg]
+)
+
+
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+):
+    """Set up the sensor platform."""
+    coordinator: MySmartBikeDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    entities = []
+
+    data: list[MySmartBikeDevice] = list(coordinator.data.values())
+
+    for result in data:
+        entities.extend(
+            [
+                MySmartBikeSensor(result, coordinator, description)
+                for description in SENSORS
+                if description.exists_fn(result)
+            ]
+        )
+    LOGGER.debug("async_setup_entry: Sensor count for creation - %s", len(entities))
+    async_add_entities(entities)
+
+
+class MySmartBikeSensor(CoordinatorEntity[MySmartBikeDataUpdateCoordinator], SensorEntity):
+    """MySmartBike Sensor."""
+
+    _attr_has_entity_name = True
+    entity_description: MySmartBikeSensorDescription
+
+    def __init__(
+        self,
+        device: MySmartBikeDevice,
+        coordinator: MySmartBikeDataUpdateCoordinator,
+        description: MySmartBikeSensorDescription,
+    ) -> None:
+        """Initialize the sensor."""
+
+        super().__init__(coordinator)
+
+        self.device = device
+        self._attr_unique_id = util.slugify(f"{device.serial} {description.key}")
+        self._attr_name = description.key
+        self._attr_should_poll = False
+
+        self.entity_description = description
+
+        if coordinator.data:
+            self._sensor_data = getattr(coordinator.data.get(device.serial), description.key)
 
     @property
-    def state(self):
-        """Return the state of the sensor."""
+    def native_value(self) -> str | int | float | datetime | None:
+        """Return the state."""
+        return self.entity_description.value_fn(self._sensor_data)
 
-        return self._state
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return the state attributes."""
 
+        return (
+            self.entity_description.attr_fn(self.coordinator.data.get(self.device.serial))
+            if self.coordinator.data
+            else {}
+        )
 
-    async def async_added_to_hass(self) -> None:
-        """Call when entity about to be added to Home Assistant."""
-        await super().async_added_to_hass()
-        # __init__ will set self._state to self._initial, only override
-        # if needed.
-        state = await self.async_get_last_state()
-        if state is not None:
-            self._state = state.state
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Device information."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.device.serial)},
+            manufacturer=self.device.manufacturer_name,
+            model=self.device.model_name,
+            name=(f"{self.device.manufacturer_name} {self.device.model_name}"),
+        )
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle data update."""
+        if self.coordinator.data:
+            self._sensor_data = getattr(
+                self.coordinator.data.get(self.device.serial),
+                self.entity_description.key,
+            )
+            self.async_write_ha_state()

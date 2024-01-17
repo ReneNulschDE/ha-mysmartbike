@@ -19,11 +19,16 @@ IMPORTANT:
 
 ## Installation
 
+### Manual installation
 - This is a Home Assistant custom component (not an Add-in).
 - Download the folder custom_component and copy it into your Home-Assistant config folder.
 - [How to install a custom component?](https://www.google.com/search?q=how+to+install+custom+components+home+assistant)
 - Restart HA, Refresh your HA Browser window
-- (or add the github repo Url to HACS...)
+### HACS
+- Add a custom repository - [more here](https://hacs.xyz/docs/faq/custom_repositories/)
+  - URL: https://github.com/ReneNulschDE/ha-mysmartbike
+  - Type: Integration
+- Restart HA, Refresh your HA Browser window
 
 ## Configuration
 

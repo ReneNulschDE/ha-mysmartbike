@@ -1,8 +1,10 @@
-# MySmartBike
+# MySmartBike (Male powered e-bikes) integration for Home-Assistant.
 
 [![HassFest tests](https://github.com/renenulschde/ha-mysmartbike/workflows/Validate%20with%20hassfest/badge.svg)](https://developers.home-assistant.io/blog/2020/04/16/hassfest)
 
 MySmartBike (Male powered e-bikes) platform as a Custom Component for Home Assistant.
+
+> :warning: This component is in an very early state and tested with an Schindelhauer Arthur IX only.
 
 IMPORTANT:
 
@@ -10,12 +12,12 @@ IMPORTANT:
 
 - Tested Countries: DE
 
-### Features:
+## Features:
 
 - Connect to MySmartBike Cloud and collect registered devices
 - Create sensors and device tracker for the found devices
 
-### Installation
+## Installation
 
 - This is a Home Assistant custom component (not an Add-in).
 - Download the folder custom_component and copy it into your Home-Assistant config folder.
@@ -23,32 +25,32 @@ IMPORTANT:
 - Restart HA, Refresh your HA Browser window
 - (or add the github repo Url to HACS...)
 
-### Configuration
+## Configuration
 
 Use the "Add Integration" in Home Assistant and select "MySmartBike" and follow the following steps:
 
 1. Put in your MySmartBike email address and password in the component setup.
 
-### Sensors
+## Sensors
 
 - State of charge (Percent, 0-100)
 - Odometer (in meters) - Conversation is WIP
 
-### Diagnostic Sensors
+## Diagnostic Sensors
 
 [Diagnostic sensors](https://www.home-assistant.io/blog/2021/11/03/release-202111/#entity-categorization) are hidden by default, check the devices page to see the current values
 
 - None
 
-### Services
+## Services
 
 - None
 
-### Switches
+## Switches
 
 - None
 
-### Logging
+## Logging
 
 Set the logging to debug with the following settings in case of problems.
 
@@ -59,11 +61,11 @@ logger:
     custom_components.mysmartbike: debug
 ```
 
-### Open Items
+## Open Items
 
 - List is too long as we are on version 0.0.1
 
-### Useful links
+## Useful links
 
 - [Forum post](WIP)
 

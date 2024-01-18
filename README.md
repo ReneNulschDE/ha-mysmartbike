@@ -76,10 +76,7 @@ logger:
 
 ## Trademark Legal Notices
 
-All product names, trademarks and registered trademarks in the images in this
-repository, are property of their respective owners. All images in this
-repository are used by this project for identification purposes
-only.
+All product names, trademarks and registered trademarks in this
+repository, are property of their respective owners and are used by this project for identification purposes only.
 
-The use of these names, trademarks and brands appearing in these image files,
-do not imply endorsement.
+The use of these names, trademarks and brands appearing do not imply endorsement.

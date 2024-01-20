@@ -75,7 +75,7 @@ logger:
 
 ## Useful links
 
-- [Forum post](WIP)
+- [Forum post](https://community.home-assistant.io/t/mysmartbike-mahle-powered-e-bikes-integration-for-home-assistant/676740)
 
 ## Trademark Legal Notices
 

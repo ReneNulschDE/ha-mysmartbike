@@ -1,6 +1,6 @@
 # MySmartBike (Male powered e-bikes) integration for Home-Assistant.
 
-[![HassFest tests](https://github.com/renenulschde/ha-mysmartbike/workflows/Validate%20with%20hassfest/badge.svg)](https://developers.home-assistant.io/blog/2020/04/16/hassfest)
+![HassFest tests](https://img.shields.io/github/actions/workflow/status/renenulschde/ha-mysmartbike/.github/workflows/hassfest.yaml?label=hassfest%20check)
 
 MySmartBike (Male powered e-bikes) platform as a Custom Component for Home Assistant.
 
@@ -20,11 +20,14 @@ IMPORTANT:
 ## Installation
 
 ### Manual installation
+
 - This is a Home Assistant custom component (not an Add-in).
 - Download the folder custom_component and copy it into your Home-Assistant config folder.
 - [How to install a custom component?](https://www.google.com/search?q=how+to+install+custom+components+home+assistant)
 - Restart HA, Refresh your HA Browser window
+
 ### HACS
+
 - Add a custom repository - [more here](https://hacs.xyz/docs/faq/custom_repositories/)
   - URL: https://github.com/ReneNulschDE/ha-mysmartbike
   - Type: Integration

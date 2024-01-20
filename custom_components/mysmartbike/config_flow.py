@@ -14,7 +14,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import selector
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import DOMAIN, LOGGER
+from .const import DOMAIN, LOGGER, VERIFY_SSL
 from .exceptions import MySmartBikeAuthException
 from .webapi import MySmartBikeWebApi
 
@@ -61,7 +61,7 @@ class Link2HomeConfigFlow(ConfigFlow, domain=DOMAIN):
             self._abort_if_unique_id_configured()
 
         webapi: MySmartBikeWebApi = MySmartBikeWebApi(
-            async_get_clientsession(self.hass), username, password
+            self.hass, async_get_clientsession(self.hass, VERIFY_SSL), username, password
         )
         try:
             if not await webapi.login():

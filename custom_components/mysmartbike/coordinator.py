@@ -33,7 +33,7 @@ class MySmartBikeDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Initialize."""
 
         self.hass: HomeAssistant = hass
-        self.webapi: MySmartBikeWebApi = MySmartBikeWebApi(session, username, password)
+        self.webapi: MySmartBikeWebApi = MySmartBikeWebApi(hass, session, username, password)
 
         super().__init__(hass, LOGGER, name=DOMAIN, update_interval=UPDATE_INTERVAL)
 

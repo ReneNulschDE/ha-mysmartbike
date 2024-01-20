@@ -6,7 +6,7 @@ from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import DOMAIN, LOGGER, MYSMARTBIKE_PLATFORMS
+from .const import DOMAIN, LOGGER, MYSMARTBIKE_PLATFORMS, VERIFY_SSL
 from .coordinator import MySmartBikeDataUpdateCoordinator
 
 
@@ -16,7 +16,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry):
     username: str = config_entry.options[CONF_USERNAME]
     password: str = config_entry.options[CONF_PASSWORD]
 
-    websession = async_get_clientsession(hass)
+    websession = async_get_clientsession(hass, VERIFY_SSL)
 
     coordinator = MySmartBikeDataUpdateCoordinator(hass, websession, username, password)
     await coordinator.async_init()

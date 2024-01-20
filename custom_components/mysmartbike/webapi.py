@@ -6,8 +6,11 @@ import logging
 import traceback
 from typing import Any
 
-from aiohttp import ClientResponseError, ClientSession, ClientTimeout
+from aiohttp import ClientResponseError, ClientSession
 from aiohttp.client_exceptions import ClientError
+
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
     API_BASE_URI,
@@ -16,8 +19,8 @@ from .const import (
     API_X_PLATFORM,
     API_X_THEME,
     API_X_VERSION,
-    DISABLE_SSL_CERT_CHECK,
     SYSTEM_PROXY,
+    VERIFY_SSL,
 )
 from .device import MySmartBikeDevice
 from .exceptions import MySmartBikeAuthException
@@ -30,6 +33,7 @@ class MySmartBikeWebApi:
 
     def __init__(
         self,
+        hass: HomeAssistant,
         session: ClientSession,
         username: str,
         password: str,
@@ -40,6 +44,7 @@ class MySmartBikeWebApi:
         self._password: str = password
         self.initialized: bool = False
         self.token: str = ""
+        self.hass: HomeAssistant = hass
 
     async def login(self) -> bool:
         """Get the login token from MySmartBike cloud."""
@@ -96,7 +101,6 @@ class MySmartBikeWebApi:
             kwargs.setdefault("headers", {})
 
         kwargs.setdefault("proxy", SYSTEM_PROXY)
-        kwargs.setdefault("ssl", DISABLE_SSL_CERT_CHECK)
 
         kwargs["headers"].update(
             {
@@ -110,21 +114,16 @@ class MySmartBikeWebApi:
             }
         )
 
-        use_running_session = self._session and not self._session.closed
-
-        if use_running_session:
-            session = self._session
-        else:
-            session = ClientSession(timeout=ClientTimeout(total=30))
+        if not self._session or self._session.closed:
+            self._session = async_get_clientsession(self.hass, VERIFY_SSL)
 
         try:
-            # async with session.request(method, url, proxy=proxy, ssl=False, **kwargs) as resp:
             if "url" in kwargs:
-                async with session.request(method, **kwargs) as resp:
+                async with self._session.request(method, **kwargs) as resp:
                     # resp.raise_for_status()
                     return await resp.json(content_type=None)
             else:
-                async with session.request(method, url, **kwargs) as resp:
+                async with self._session.request(method, url, **kwargs) as resp:
                     resp.raise_for_status()
                     return await resp.json(content_type=None)
 
@@ -140,9 +139,6 @@ class MySmartBikeWebApi:
             return None
         except Exception:
             LOGGER.debug(traceback.format_exc())
-        finally:
-            if not use_running_session:
-                await session.close()
 
     async def _build_device_list(self, data) -> dict[str, MySmartBikeDevice]:
         root_objects: dict[str, MySmartBikeDevice] = {}

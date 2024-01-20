@@ -51,3 +51,8 @@ repos:
         entry: "USE_PROXY = True"
         language: pygrep
         types: [python]
+      - id: const-check-ssl-check-not-correct
+        name: const-check-ssl-check-not-correct
+        entry: "VERIFY_SSL = False"
+        language: pygrep
+        types: [python]

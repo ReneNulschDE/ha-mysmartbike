@@ -3,5 +3,7 @@ astroid==3.0.1
 mypy==1.8.0
 pre-commit==3.6.0
 pylint==3.0.3
-types-requests==2.31.0.3
+codespell==2.2.2
+ruff==0.1.8
+yamllint==1.32.0
 homeassistant-stubs==2024.1.3

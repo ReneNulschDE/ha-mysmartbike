@@ -1,8 +1,8 @@
-# MySmartBike (Male powered e-bikes) integration for Home-Assistant.
+# MySmartBike (Mahle powered e-bikes) integration for Home-Assistant.
 
 ![HassFest tests](https://img.shields.io/github/actions/workflow/status/renenulschde/ha-mysmartbike/.github/workflows/hassfest.yaml?label=hassfest%20check)
 
-MySmartBike (Male powered e-bikes) platform as a Custom Component for Home Assistant.
+MySmartBike (Mahle powered e-bikes) platform as a Custom Component for Home Assistant.
 
 > :warning: This component is in an very early state and tested with an Schindelhauer Arthur IX only.
 

@@ -88,11 +88,7 @@ class Link2HomeConfigFlow(ConfigFlow, domain=DOMAIN):
         except Exception:
             errors["base"] = "unknown"
 
-        return self.async_create_entry(
-            title=username,
-            data={},
-            options={CONF_USERNAME: username, CONF_PASSWORD: password},
-        )
+        return self.async_show_form(step_id="user", data_schema=CONFIG_SCHEMA, errors=errors)
 
     async def async_step_reauth(self, user_input=None):
         """Get new tokens for a config entry that can't authenticate."""
@@ -101,12 +97,3 @@ class Link2HomeConfigFlow(ConfigFlow, domain=DOMAIN):
         self._existing_entry = user_input
 
         return self.async_show_form(step_id="user", data_schema=CONFIG_SCHEMA)
-
-
-class InputValidationError(HomeAssistantError):
-    """Error to indicate we cannot proceed due to invalid input."""
-
-    def __init__(self, base: str) -> None:
-        """Initialize with error base."""
-        super().__init__()
-        self.base = base

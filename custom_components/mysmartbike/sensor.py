@@ -51,7 +51,6 @@ SENSORS: tuple[MySmartBikeSensorDescription, ...] = (
     MySmartBikeSensorDescription(
         key="odometry",
         native_unit_of_measurement=UnitOfLength.METERS,
-        suggested_unit_of_measurement=UnitOfLength.KILOMETERS,
         device_class=SensorDeviceClass.DISTANCE,
         state_class=SensorStateClass.MEASUREMENT,
         translation_key="odometry",

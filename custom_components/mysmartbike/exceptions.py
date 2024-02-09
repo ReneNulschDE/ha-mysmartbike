@@ -1,14 +1,14 @@
 """Exceptions for the MySmartBike integration."""
 from __future__ import annotations
 
-from homeassistant.exceptions import IntegrationError
+from homeassistant.exceptions import ConfigEntryAuthFailed, IntegrationError
 
 
 class MySmartBikeException(IntegrationError):
     """Base class for MySmartBike related errors."""
 
 
-class MySmartBikeAuthException(MySmartBikeException):
+class MySmartBikeAuthException(ConfigEntryAuthFailed):
     """Auth related errors."""
 
 

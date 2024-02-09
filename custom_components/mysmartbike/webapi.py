@@ -1,8 +1,11 @@
 """The MySmartBike WebAPI."""
 from __future__ import annotations
 
+import base64
 from datetime import datetime
+import json
 import logging
+import time
 import traceback
 from typing import Any
 
@@ -37,19 +40,25 @@ class MySmartBikeWebApi:
         session: ClientSession,
         username: str,
         password: str,
+        token: dict[str, Any],
     ) -> None:
         """Initialize."""
         self._session: ClientSession = session
         self._username: str = username
         self._password: str = password
         self.initialized: bool = False
-        self.token: str = ""
+        self.token: dict[str, Any] = token
         self.hass: HomeAssistant = hass
 
-    async def login(self) -> bool:
+    async def login(self) -> tuple[bool, dict[str, Any]]:
         """Get the login token from MySmartBike cloud."""
         LOGGER.debug("login: Start")
 
+        if self.token and not self.is_token_expired(self.token):
+            LOGGER.debug("login: Token not expired")
+            return True, self.token
+
+        LOGGER.debug("login: Token expired")
         data = f"password={self._password}&contents_id=&email={self._username}"
 
         headers = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"}
@@ -60,21 +69,23 @@ class MySmartBikeWebApi:
 
         if login_response and login_response.get("status") and login_response.get("status") == 200:
             LOGGER.debug("login: Success")
-            self.token = login_response.get("data").get("token")
-            return True
+            self.token = self._add_custom_values_to_token_info(
+                {"access_token": login_response.get("data").get("token")}
+            )
+            return True, self.token
 
         if login_response and login_response.get("status"):
             LOGGER.warning("login: auth error -  %s", login_response)
             raise MySmartBikeAuthException(login_response)
 
-        return False
+        return False, {}
 
     async def get_device_list(self) -> dict[str, MySmartBikeDevice]:
         """Pull bikes and generate device list."""
 
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.token}",
+            "Authorization": f'Bearer {self.token["access_token"]}',
         }
 
         _response = await self._request("get", "/api/v1/objects/me?limit=5", headers=headers)
@@ -166,3 +177,28 @@ class MySmartBikeWebApi:
 
             root_objects[root_object.serial] = root_object
         return root_objects
+
+    def is_token_expired(self, token_info) -> bool:
+        """Check if the token is expired."""
+        if token_info and "expires_at" in token_info:
+            now = int(time.time())
+            return token_info["expires_at"] - now < 60
+
+        return True
+
+    def _add_custom_values_to_token_info(self, token_info):
+        """Store some values that aren't directly provided by a Web API response."""
+
+        if "access_token" in self.token:
+            # Split by dot and get middle, payload, part;
+            token_payload = self.token["access_token"].split(".")[1]
+            # To make sure decoding will always work - we're adding max padding ("==")
+            # to payload - it will be ignored if not needed.
+            token_payload_decoded = str(base64.b64decode(token_payload + "=="), "utf-8")
+            # Payload is JSON - we can load it to dict for easy access
+            payload = json.loads(token_payload_decoded)
+            # And now we can access its' elements - e.g. name
+            token_info["expires_at"] = payload["exp"]
+            return token_info
+
+        return token_info

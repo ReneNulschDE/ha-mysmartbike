@@ -10,7 +10,6 @@ import voluptuous as vol  # type: ignore
 from homeassistant.config_entries import ConfigFlow
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import selector
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -61,10 +60,11 @@ class Link2HomeConfigFlow(ConfigFlow, domain=DOMAIN):
             self._abort_if_unique_id_configured()
 
         webapi: MySmartBikeWebApi = MySmartBikeWebApi(
-            self.hass, async_get_clientsession(self.hass, VERIFY_SSL), username, password
+            self.hass, async_get_clientsession(self.hass, VERIFY_SSL), username, password, {}
         )
         try:
-            if not await webapi.login():
+            login_result, token = await webapi.login()
+            if not login_result:
                 LOGGER.info("")
                 errors["base"] = "invalid_auth"
                 return self.async_show_form(
@@ -73,7 +73,7 @@ class Link2HomeConfigFlow(ConfigFlow, domain=DOMAIN):
             else:
                 return self.async_create_entry(
                     title=username,
-                    data={},
+                    data={"token": token},
                     options={CONF_USERNAME: username, CONF_PASSWORD: password},
                 )
         except ClientConnectionError:

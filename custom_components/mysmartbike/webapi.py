@@ -59,7 +59,7 @@ class MySmartBikeWebApi:
         )
 
         if login_response and login_response.get("status") and login_response.get("status") == 200:
-            LOGGER.debug("login: Success - %s", login_response)
+            LOGGER.debug("login: Success")
             self.token = login_response.get("data").get("token")
             return True
 

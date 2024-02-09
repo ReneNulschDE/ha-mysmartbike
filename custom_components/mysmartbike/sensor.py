@@ -110,7 +110,6 @@ class MySmartBikeSensor(CoordinatorEntity[MySmartBikeDataUpdateCoordinator], Sen
 
         self.device = device
         self._attr_unique_id = util.slugify(f"{device.serial} {description.key}")
-        self._attr_name = description.key
         self._attr_should_poll = False
 
         self.entity_description = description

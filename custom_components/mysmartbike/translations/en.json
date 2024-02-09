@@ -41,5 +41,15 @@
     "info": {
       "api_endpoint_reachable": "MySmartBike API endpoint reachable"
     }
+  },
+  "entity": {
+    "sensor": {
+      "odometry": {
+        "name": "Ride distance"
+      },
+      "state_of_charge": {
+        "name": "State of charge"
+      }
+    }
   }
 }

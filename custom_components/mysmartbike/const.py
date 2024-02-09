@@ -20,7 +20,6 @@ API_BASE_URI = API_BASE_URI_CLOUD if not USE_SIMULATOR else API_BASE_URI_SIMULAT
 USE_PROXY = False
 VERIFY_SSL = True
 SYSTEM_PROXY: str | None = None if not USE_PROXY else "http://0.0.0.0:8080"
-PROXIES: dict | None = {} if not USE_PROXY else {"https": SYSTEM_PROXY}
 
 API_USER_AGENT = "ENDUSER/2.1.1 (com.mahle.sbs; build 9; IOS 17.3)"
 API_X_APP = "ENDUSER"

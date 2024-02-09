@@ -13,8 +13,9 @@ LOGGER = logging.getLogger(__package__)
 UPDATE_INTERVAL = timedelta(seconds=300)
 
 USE_SIMULATOR = False
-API_BASE_URI_CLOUD = "https://my-smartbike.com"
 API_BASE_URI_SIMULATOR = "http://0.0.0.0:8001"
+
+API_BASE_URI_CLOUD = "https://my-smartbike.com"
 API_BASE_URI = API_BASE_URI_CLOUD if not USE_SIMULATOR else API_BASE_URI_SIMULATOR
 
 USE_PROXY = False

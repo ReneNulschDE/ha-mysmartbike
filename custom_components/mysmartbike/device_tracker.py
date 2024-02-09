@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 
+from homeassistant import util
 from homeassistant.components.device_tracker import SourceType, TrackerEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
@@ -38,6 +39,12 @@ async def async_setup_entry(
 class MySmartBikeTrackerEntity(TrackerEntity, RestoreEntity):
     """Represent a tracked MySmartBike device."""
 
+    _attr_force_update = False
+    _attr_has_entity_name = True
+    _attr_icon = "mdi:bicycle"
+    _attr_name = "Device Tracker"
+    _attr_should_poll = True
+
     def __init__(
         self,
         device: MySmartBikeDevice,
@@ -47,6 +54,8 @@ class MySmartBikeTrackerEntity(TrackerEntity, RestoreEntity):
 
         self.coordinator: MySmartBikeDataUpdateCoordinator = coordinator
         self.device: MySmartBikeDevice = device
+
+        self._attr_unique_id = util.slugify(f"{device.serial}_device_tracker")
 
     @property
     def latitude(self) -> float | None:
@@ -66,11 +75,6 @@ class MySmartBikeTrackerEntity(TrackerEntity, RestoreEntity):
         return (
             self.coordinator.data[self.device.serial].longitude if self.coordinator.data else None
         )
-
-    @property
-    def icon(self) -> str:
-        """Return the icon of the device."""
-        return "mdi:bike"
 
     @property
     def source_type(self) -> SourceType:

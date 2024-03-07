@@ -4,7 +4,7 @@ from __future__ import annotations
 from datetime import timedelta
 import logging
 
-from homeassistant.const import Platform
+from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, Platform
 
 MYSMARTBIKE_PLATFORMS = [Platform.SENSOR, Platform.DEVICE_TRACKER]
 
@@ -27,3 +27,11 @@ API_X_APP = "ENDUSER"
 API_X_PLATFORM = "IOS"
 API_X_THEME = "DARK"
 API_X_VERSION = "2.1.1"
+
+JSON_EXPORT_IGNORED_KEYS = (
+    "access_token",
+    "refresh_token",
+    CONF_PASSWORD,
+    CONF_USERNAME,
+    "unique_id",
+)

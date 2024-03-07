@@ -1,4 +1,4 @@
-"""Config flow for NEW_NAME integration."""
+"""Config flow for MySmartBike integration."""
 from __future__ import annotations
 
 from http import HTTPStatus
@@ -34,7 +34,7 @@ CONFIG_SCHEMA = vol.Schema(
 
 
 class Link2HomeConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config or options flow for Link2Home."""
+    """Handle a config or options flow for MySmartBike."""
 
     VERSION = 1
 

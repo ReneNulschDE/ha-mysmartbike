@@ -1,4 +1,4 @@
-"""The Link2Home integration."""
+"""The MySmartBike integration."""
 from __future__ import annotations
 
 from homeassistant.config_entries import ConfigEntry
@@ -10,7 +10,7 @@ from .coordinator import MySmartBikeDataUpdateCoordinator
 
 
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry):
-    """Set up Link2Home from a config entry."""
+    """Set up MySmartBike from a config entry."""
 
     websession = async_get_clientsession(hass, VERIFY_SSL)
 

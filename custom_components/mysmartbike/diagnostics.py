@@ -1,4 +1,4 @@
-"""Diagnostics support for AccuWeather."""
+"""Diagnostics support for MySmartBike."""
 from __future__ import annotations
 
 from typing import Any

@@ -4,18 +4,20 @@
 
 MySmartBike (Mahle powered e-bikes) platform as a Custom Component for Home Assistant.
 
-> :warning: This component is in an very early state and tested with an Schindelhauer Arthur IX only.
-
 IMPORTANT:
 
 - Please login once in the MySmartBike IOS or Android app before you install this component. Make sure you connected your bike(s) in the app
 
-- Tested Countries: DE
+- Tested countries: DE
+
+- Tested bikes:
+  - Schindelhauer Arthur IX
+  - Orbea Vibe
 
 ## Features:
 
 - Connect to MySmartBike Cloud and collect registered devices
-- Create sensors and device tracker for the found devices
+- Create sensors and device tracker for the devices
 
 ## Installation
 
@@ -38,6 +40,10 @@ IMPORTANT:
 Use the "Add Integration" in Home Assistant and select "MySmartBike" and follow the following steps:
 
 1. Put in your MySmartBike email address and password in the component setup.
+
+## Device Tracker
+
+- Device Tracker with GPS data (last location reported)
 
 ## Sensors
 

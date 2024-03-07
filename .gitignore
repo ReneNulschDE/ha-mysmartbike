@@ -107,3 +107,4 @@ venv.bak/
 # private dev api files
 .*-dev
 internal_docs/
+.ruff_cache/

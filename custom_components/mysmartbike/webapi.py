@@ -120,7 +120,7 @@ class MySmartBikeWebApi:
                 "Accept-Language": "de-DE",
                 "X-Theme": API_X_THEME,
                 "X-App": API_X_APP,
-                "X-Platform": API_X_PLATFORM,
+               # "X-Platform": API_X_PLATFORM,
                 "X-Version": API_X_VERSION,
             }
         )

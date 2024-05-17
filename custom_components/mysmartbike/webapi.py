@@ -1,4 +1,5 @@
 """The MySmartBike WebAPI."""
+
 from __future__ import annotations
 
 import base64
@@ -120,7 +121,7 @@ class MySmartBikeWebApi:
                 "Accept-Language": "de-DE",
                 "X-Theme": API_X_THEME,
                 "X-App": API_X_APP,
-               # "X-Platform": API_X_PLATFORM,
+                # "X-Platform": API_X_PLATFORM,
                 "X-Version": API_X_VERSION,
             }
         )
@@ -170,7 +171,7 @@ class MySmartBikeWebApi:
                 rbike.get("object_model").get("model_name"),
                 rbike.get("longitude"),
                 rbike.get("latitude"),
-                datetime.strptime(rbike.get("last_position_date"), "%Y-%m-%d %H:%M:%S"),
+                datetime.strptime(rbike.get("diagnosed_at"), "%Y-%m-%d %H:%M:%S"),
                 state_of_charge,
                 remaining_capacity,
             )

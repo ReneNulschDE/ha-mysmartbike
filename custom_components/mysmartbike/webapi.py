@@ -90,10 +90,26 @@ class MySmartBikeWebApi:
         }
 
         _response = await self._request("get", "/api/v1/objects/me?limit=5", headers=headers)
+
         if _response and _response.get("status") and _response.get("status") == 200:
             # LOGGER.debug("get_device_list: %s", _response)
 
-            return await self._build_device_list(_response)
+            _location_data: list = []
+
+            _location_response = await self._request(
+                "get",
+                "/api/v1/objects/me?root_objects=true&list_mode=MAP",
+                headers=headers,
+            )
+
+            if (
+                _location_response
+                and _location_response.get("status")
+                and _location_response.get("status") == 200
+            ):
+                _location_data = _location_response.get("data", [])
+
+            return await self._build_device_list(_response, _location_data)
 
         LOGGER.debug("get_device_list: other error -  %s")
         return {}
@@ -152,11 +168,13 @@ class MySmartBikeWebApi:
         except Exception:
             LOGGER.debug(traceback.format_exc())
 
-    async def _build_device_list(self, data) -> dict[str, MySmartBikeDevice]:
+    async def _build_device_list(self, data, location_data) -> dict[str, MySmartBikeDevice]:
         root_objects: dict[str, MySmartBikeDevice] = {}
         for rbike in data["data"]:
             state_of_charge: int | None = None
             remaining_capacity: int | None = None
+            longitude: int | None = None
+            latitude: int | None = None
 
             for obj in rbike["object_tree"]:
                 if "state_of_charge" in obj:
@@ -164,13 +182,24 @@ class MySmartBikeWebApi:
                 if "remaining_capacity" in obj:
                     remaining_capacity = obj["remaining_capacity"]
 
+            brand_alias = rbike["object_model"]["brand"]["alias"]
+            model_name = rbike.get("object_model").get("model_name")
+            model_year = rbike.get("object_model").get("model_year")
+            location_bike_name = f"{brand_alias} {model_name} {model_year}"
+
+            for bike in location_data:
+                if bike[3] and bike[3] == location_bike_name:
+                    longitude = bike[2]
+                    latitude = bike[1]
+                    break
+
             root_object = MySmartBikeDevice(
                 rbike["serial"],
                 rbike["odometry"],
-                rbike["object_model"]["brand"]["alias"],
-                rbike.get("object_model").get("model_name"),
-                rbike.get("longitude"),
-                rbike.get("latitude"),
+                brand_alias,
+                model_name,
+                longitude,
+                latitude,
                 datetime.strptime(rbike.get("diagnosed_at"), "%Y-%m-%d %H:%M:%S"),
                 state_of_charge,
                 remaining_capacity,

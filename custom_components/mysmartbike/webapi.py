@@ -92,7 +92,7 @@ class MySmartBikeWebApi:
         _response = await self._request("get", "/api/v1/objects/me?limit=5", headers=headers)
 
         if _response and _response.get("status") and _response.get("status") == 200:
-            # LOGGER.debug("get_device_list: %s", _response)
+            LOGGER.debug("get_device_list: %s", _response)
 
             _location_data: list = []
 
@@ -195,7 +195,7 @@ class MySmartBikeWebApi:
 
             root_object = MySmartBikeDevice(
                 rbike["serial"],
-                rbike["odometry"],
+                rbike.get("odometry", -1),
                 brand_alias,
                 model_name,
                 longitude,

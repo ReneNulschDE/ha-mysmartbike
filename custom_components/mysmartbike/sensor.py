@@ -3,6 +3,7 @@
 For more details about this component, please refer to the documentation at
 https://github.com/ReneNulschDE/ha-mysmartbike/
 """
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -65,6 +66,15 @@ SENSORS: tuple[MySmartBikeSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: cast(int, data),
         exists_fn=lambda device: bool(device.state_of_charge),
+    ),  # type: ignore[call-arg]
+    MySmartBikeSensorDescription(
+        key="remaining_capacity",
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
+        device_class=SensorDeviceClass.DISTANCE,
+        state_class=SensorStateClass.MEASUREMENT,
+        translation_key="remaining_capacity",
+        value_fn=lambda data: cast(int, data),
+        exists_fn=lambda device: bool(device.remaining_capacity),
     ),  # type: ignore[call-arg]
 )
 

@@ -49,6 +49,9 @@
       },
       "state_of_charge": {
         "name": "State of charge"
+      },
+      "remaining_capacity": {
+        "name": "Remaining capacity"
       }
     }
   }

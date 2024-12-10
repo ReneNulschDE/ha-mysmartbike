@@ -1,4 +1,4 @@
-"""Simple HTTP Server to simulate the Link2Home API."""
+"""Simple HTTP Server to simulate the MySmartBike API."""
 from __future__ import annotations
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -11,34 +11,48 @@ HTTP_SERVER_IP = "0.0.0.0"
 HTTP_SERVER_PORT = 8001
 LOGGER = logging.getLogger(__package__)
 
+CHAOS_MONKEY = False
 
-class Link2HomeSimulatorServer(BaseHTTPRequestHandler):
-    """Simple HTTP Server to simulate the Link2Home API."""
+class MySmartBikeSimulatorServer(BaseHTTPRequestHandler):
+    """Simple HTTP Server to simulate the MySmartBike API."""
 
     def do_GET(self):
         """Answer get requests."""
-        self.send_response(200)
-        self.send_header("Content-type", "application/json;charset=UTF-8")
-        self.end_headers()
 
-        parsed = urlparse(self.path)
-        if parsed.path == "/api/v1/users/login":
-            if os.path.isfile("./api/v1/users/.login-200-dev"):
-                with open("./api/v1/users/.login-200-dev", "rb") as file:
-                    self.wfile.write(file.read())
-            else:
-                with open("./api/v1/users/login-200", "rb") as file:
-                    self.wfile.write(file.read())
-            return
-        if parsed.path == "/api/v1/objects/me":
-            if os.path.isfile("./api/v1/objects/.me-200-dev"):
-                with open("./api/v1/objects/.me-200-dev", "rb") as file:
-                    self.wfile.write(file.read())  # Read the file and send the contents
-            else:
-                with open("./api/v1/objects/me-200", "rb") as file:
-                    self.wfile.write(file.read())  # Read the file and send the contents
-            return
-        LOGGER.debug("Unknown request path: %s", self.path)
+        if not CHAOS_MONKEY:
+            self.send_response(200)
+            self.send_header("Content-type", "application/json;charset=UTF-8")
+            self.end_headers()
+
+            parsed = urlparse(self.path)
+            if parsed.path == "/api/v1/users/login":
+                if os.path.isfile("./api/v1/users/.login-200-dev"):
+                    with open("./api/v1/users/.login-200-dev", "rb") as file:
+                        self.wfile.write(file.read())
+                else:
+                    with open("./api/v1/users/login-200", "rb") as file:
+                        self.wfile.write(file.read())
+                return
+            if parsed.path == "/api/v1/objects/me":
+                if "list_mode=MAP" in parsed.query:
+                    if os.path.isfile("./api/v1/objects/.map-200-dev"):
+                        with open("./api/v1/objects/.map-200-dev", "rb") as file:
+                            self.wfile.write(file.read())  # Read the file and send the contents
+                    else:
+                        with open("./api/v1/objects/map-200", "rb") as file:
+                            self.wfile.write(file.read())  # Read the file and send the contents
+                    return
+
+                if os.path.isfile("./api/v1/objects/.me-200-dev"):
+                    with open("./api/v1/objects/.me-200-dev", "rb") as file:
+                        self.wfile.write(file.read())  # Read the file and send the contents
+                else:
+                    with open("./api/v1/objects/me-200", "rb") as file:
+                        self.wfile.write(file.read())  # Read the file and send the contents
+                return
+            LOGGER.debug("Unknown request path: %s", self.path)
+        else:
+            self.send_error(504, "Gateway not available")
 
     def do_POST(self):
         """Answer post requests."""
@@ -59,7 +73,7 @@ def set_logger():
 
 
 if __name__ == "__main__":
-    webServer = HTTPServer((HTTP_SERVER_IP, HTTP_SERVER_PORT), Link2HomeSimulatorServer)
+    webServer = HTTPServer((HTTP_SERVER_IP, HTTP_SERVER_PORT), MySmartBikeSimulatorServer)
     set_logger()
     LOGGER.debug("Server started http://%s:%s", HTTP_SERVER_IP, HTTP_SERVER_PORT)
 

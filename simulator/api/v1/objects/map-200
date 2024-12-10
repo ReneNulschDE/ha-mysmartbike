@@ -1,0 +1,25 @@
+{
+    "status": 200,
+    "code": "OK",
+    "success": true,
+    "data": [
+        [
+            null,
+            51.361428381464485,
+            12.365591218986726,
+            "Schindelhauer Arthur IX 2021",
+            "#FFFFFF",
+            "#323338",
+            "SB"
+        ],
+        [
+            null,
+            41.016576583535425,
+            9.54213718884582,
+            "ORBEA VIBE 2021",
+            "#ffffff",
+            "#0D8699",
+            "OB"
+        ]
+    ]
+}

@@ -10,7 +10,7 @@ import time
 import traceback
 from typing import Any
 
-from aiohttp import ClientResponseError, ClientSession
+from aiohttp import ClientConnectorError, ClientResponseError, ClientSession
 from aiohttp.client_exceptions import ClientError
 
 from homeassistant.core import HomeAssistant
@@ -27,7 +27,7 @@ from .const import (
     VERIFY_SSL,
 )
 from .device import MySmartBikeDevice
-from .exceptions import MySmartBikeAuthException
+from .exceptions import MySmartBikeAuthException, MySmartBikeAPINotAvailable
 
 LOGGER = logging.getLogger(__name__)
 
@@ -158,15 +158,18 @@ class MySmartBikeWebApi:
         except ClientResponseError as err:
             LOGGER.debug(traceback.format_exc())
             if not ignore_errors:
+                if err.code == 504:
+                    raise MySmartBikeAPINotAvailable(traceback.format_exc())
                 raise MySmartBikeAuthException from err
             return None
         except ClientError as err:
             LOGGER.debug(traceback.format_exc())
             if not ignore_errors:
-                raise ClientError from err
+                raise MySmartBikeAPINotAvailable(traceback.format_exc())
             return None
-        except Exception:
+        except Exception as err:
             LOGGER.debug(traceback.format_exc())
+            raise err
 
     async def _build_device_list(self, data, location_data) -> dict[str, MySmartBikeDevice]:
         root_objects: dict[str, MySmartBikeDevice] = {}

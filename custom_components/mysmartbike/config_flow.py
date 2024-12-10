@@ -2,14 +2,14 @@
 from __future__ import annotations
 
 from http import HTTPStatus
-from typing import Any
+import traceback
+from typing import Any, Mapping
 
 from aiohttp import ClientConnectionError, ClientResponseError
 import voluptuous as vol  # type: ignore
 
-from homeassistant.config_entries import ConfigFlow
+from homeassistant.config_entries import ConfigFlow, ConfigFlowResult, ConfigEntry
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import selector
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -33,18 +33,18 @@ CONFIG_SCHEMA = vol.Schema(
 )
 
 
-class Link2HomeConfigFlow(ConfigFlow, domain=DOMAIN):
+class MySmartBikeConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config or options flow for MySmartBike."""
 
     VERSION = 1
 
     def __init__(self):
         """Initialize component."""
-        self._existing_entry = None
-        self.data = None
+        self._existing_entry: ConfigEntry
+        self.data: Mapping[str, Any]
         self.reauth_mode = False
 
-    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Get configuration from the user."""
 
         if user_input is None:
@@ -71,29 +71,39 @@ class Link2HomeConfigFlow(ConfigFlow, domain=DOMAIN):
                     step_id="user", data_schema=CONFIG_SCHEMA, errors=errors
                 )
             else:
-                return self.async_create_entry(
-                    title=username,
-                    data={"token": token},
-                    options={CONF_USERNAME: username, CONF_PASSWORD: password},
-                )
+                if self.reauth_mode:
+                    LOGGER.debug("async_step_user - Reauth save step")
+                    self.hass.config_entries.async_update_entry(self._existing_entry, data={"token": token}, options={CONF_USERNAME: username, CONF_PASSWORD: password})
+                    self.hass.async_create_task(self.hass.config_entries.async_reload(self._existing_entry.entry_id))
+                    return self.async_abort(reason="reauth_successful")
+                else:
+                    LOGGER.debug("async_step_user - Auth save step")
+                    return self.async_create_entry(
+                        title=username,
+                        data={"token": token},
+                        options={CONF_USERNAME: username, CONF_PASSWORD: password},
+                    )
         except ClientConnectionError:
+            LOGGER.debug("async_step_user - show form after exception - %s", traceback.format_exc())
             errors["base"] = "invalid_auth"
         except ClientResponseError as error:
             if error.status == HTTPStatus.UNAUTHORIZED:
                 errors["base"] = "invalid_auth"
             else:
+                LOGGER.debug("async_step_user - show form after exception - %s", traceback.format_exc())
                 errors["base"] = "unknown"
         except MySmartBikeAuthException:
             errors["base"] = "invalid_auth"
-        except Exception:
+        except Exception as err:
+            LOGGER.debug("async_step_user - show form after exception - %s", traceback.format_exc())
             errors["base"] = "unknown"
 
         return self.async_show_form(step_id="user", data_schema=CONFIG_SCHEMA, errors=errors)
 
-    async def async_step_reauth(self, user_input=None):
+    async def async_step_reauth(self, user_input: ConfigEntry):
         """Get new tokens for a config entry that can't authenticate."""
 
         self.reauth_mode = True
-        self._existing_entry = user_input
+        self._existing_entry = self.hass.config_entries.async_get_entry(self.context["entry_id"]) # type: ignore
 
         return self.async_show_form(step_id="user", data_schema=CONFIG_SCHEMA)

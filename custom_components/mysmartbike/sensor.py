@@ -51,11 +51,11 @@ class MySmartBikeSensorDescription(SensorEntityDescription, MySmartBikeSensorDes
 SENSORS: tuple[MySmartBikeSensorDescription, ...] = (
     MySmartBikeSensorDescription(
         key="odometry",
-        native_unit_of_measurement=UnitOfLength.METERS,
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
         device_class=SensorDeviceClass.DISTANCE,
         state_class=SensorStateClass.MEASUREMENT,
         translation_key="odometry",
-        value_fn=lambda data: cast(int, data),
+        value_fn=lambda data: cast(int, data) / 1000,
         exists_fn=lambda device: bool(device.odometry),
     ),  # type: ignore[call-arg]
     MySmartBikeSensorDescription(

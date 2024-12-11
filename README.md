@@ -1,6 +1,6 @@
 # MySmartBike (Mahle powered e-bikes) integration for Home-Assistant.
 
-![HassFest tests](https://img.shields.io/github/actions/workflow/status/renenulschde/ha-mysmartbike/.github/workflows/hassfest.yaml?label=hassfest%20check)
+![HassFest tests](https://img.shields.io/github/actions/workflow/status/renenulschde/ha-mysmartbike/.github/workflows/hassfest.yaml?label=hassfest%20check) ![Validate with HACS](https://github.com/ReneNulschDE/ha-mysmartbike/workflows/Validate%20with%20HACS/badge.svg) ![](https://img.shields.io/github/downloads/renenulschde/ha-mysmartbike/total) ![](https://img.shields.io/github/downloads/renenulschde/ha-mysmartbike/latest/total)
 
 MySmartBike (Mahle powered e-bikes) platform as a Custom Component for Home Assistant.
 

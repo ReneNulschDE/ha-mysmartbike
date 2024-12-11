@@ -10,24 +10,15 @@ import time
 import traceback
 from typing import Any
 
-from aiohttp import ClientConnectorError, ClientResponseError, ClientSession
+from aiohttp import ClientResponseError, ClientSession
 from aiohttp.client_exceptions import ClientError
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import (
-    API_BASE_URI,
-    API_USER_AGENT,
-    API_X_APP,
-    API_X_PLATFORM,
-    API_X_THEME,
-    API_X_VERSION,
-    SYSTEM_PROXY,
-    VERIFY_SSL,
-)
+from .const import API_BASE_URI, API_USER_AGENT, API_X_APP, API_X_THEME, API_X_VERSION, SYSTEM_PROXY, VERIFY_SSL
 from .device import MySmartBikeDevice
-from .exceptions import MySmartBikeAuthException, MySmartBikeAPINotAvailable
+from .exceptions import MySmartBikeAPINotAvailable, MySmartBikeAuthException
 
 LOGGER = logging.getLogger(__name__)
 
@@ -64,9 +55,7 @@ class MySmartBikeWebApi:
 
         headers = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"}
 
-        login_response = await self._request(
-            "post", "/api/v1/users/login", data=data, headers=headers
-        )
+        login_response = await self._request("post", "/api/v1/users/login", data=data, headers=headers)
 
         if login_response and login_response.get("status") and login_response.get("status") == 200:
             LOGGER.debug("login: Success")
@@ -83,6 +72,13 @@ class MySmartBikeWebApi:
 
     async def get_device_list(self) -> dict[str, MySmartBikeDevice]:
         """Pull bikes and generate device list."""
+
+        if self.is_token_expired(self.token):
+            LOGGER.info(
+                "MySmartBike Cloud token expired. Starting refresh",
+            )
+            if not await self.login():
+                raise MySmartBikeAuthException("Login not successful without exception.")
 
         headers = {
             "Content-Type": "application/json",
@@ -102,11 +98,7 @@ class MySmartBikeWebApi:
                 headers=headers,
             )
 
-            if (
-                _location_response
-                and _location_response.get("status")
-                and _location_response.get("status") == 200
-            ):
+            if _location_response and _location_response.get("status") and _location_response.get("status") == 200:
                 _location_data = _location_response.get("data", [])
 
             return await self._build_device_list(_response, _location_data)
@@ -159,13 +151,13 @@ class MySmartBikeWebApi:
             LOGGER.debug(traceback.format_exc())
             if not ignore_errors:
                 if err.code == 504:
-                    raise MySmartBikeAPINotAvailable(traceback.format_exc())
+                    raise MySmartBikeAPINotAvailable(traceback.format_exc()) from err
                 raise MySmartBikeAuthException from err
             return None
         except ClientError as err:
             LOGGER.debug(traceback.format_exc())
             if not ignore_errors:
-                raise MySmartBikeAPINotAvailable(traceback.format_exc())
+                raise MySmartBikeAPINotAvailable(traceback.format_exc()) from err
             return None
         except Exception as err:
             LOGGER.debug(traceback.format_exc())

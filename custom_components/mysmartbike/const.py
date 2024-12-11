@@ -12,7 +12,7 @@ DOMAIN = "mysmartbike"
 LOGGER = logging.getLogger(__package__)
 UPDATE_INTERVAL = timedelta(seconds=300)
 
-USE_SIMULATOR = False
+USE_SIMULATOR = True
 API_BASE_URI_SIMULATOR = "http://0.0.0.0:8001"
 
 API_BASE_URI_CLOUD = "https://my-smartbike.com"

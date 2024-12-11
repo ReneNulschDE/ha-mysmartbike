@@ -1,7 +1,8 @@
 """Exceptions for the MySmartBike integration."""
+
 from __future__ import annotations
 
-from homeassistant.exceptions import ConfigEntryAuthFailed, IntegrationError, ConfigEntryNotReady
+from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady, IntegrationError
 
 
 class MySmartBikeException(IntegrationError):
@@ -15,5 +16,6 @@ class MySmartBikeAuthException(ConfigEntryAuthFailed):
 class MySmartBikeAPIException(MySmartBikeException):
     """Api related errors."""
 
+
 class MySmartBikeAPINotAvailable(ConfigEntryNotReady):
-    """API 504 error"""
+    """API 504 error."""

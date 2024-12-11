@@ -1,14 +1,16 @@
 """Config flow for MySmartBike integration."""
+
 from __future__ import annotations
 
+from collections.abc import Mapping
 from http import HTTPStatus
 import traceback
-from typing import Any, Mapping
+from typing import Any
 
 from aiohttp import ClientConnectionError, ClientResponseError
 import voluptuous as vol  # type: ignore
 
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult, ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.helpers import selector
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -20,14 +22,10 @@ from .webapi import MySmartBikeWebApi
 CONFIG_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_USERNAME): selector.TextSelector(
-            selector.TextSelectorConfig(
-                type=selector.TextSelectorType.EMAIL, autocomplete="username"
-            )
+            selector.TextSelectorConfig(type=selector.TextSelectorType.EMAIL, autocomplete="username")
         ),
         vol.Required(CONF_PASSWORD): selector.TextSelector(
-            selector.TextSelectorConfig(
-                type=selector.TextSelectorType.PASSWORD, autocomplete="current-password"
-            ),
+            selector.TextSelectorConfig(type=selector.TextSelectorType.PASSWORD, autocomplete="current-password"),
         ),
     }
 )
@@ -67,22 +65,24 @@ class MySmartBikeConfigFlow(ConfigFlow, domain=DOMAIN):
             if not login_result:
                 LOGGER.info("")
                 errors["base"] = "invalid_auth"
-                return self.async_show_form(
-                    step_id="user", data_schema=CONFIG_SCHEMA, errors=errors
+                return self.async_show_form(step_id="user", data_schema=CONFIG_SCHEMA, errors=errors)
+
+            if self.reauth_mode:
+                LOGGER.debug("async_step_user - Reauth save step")
+                self.hass.config_entries.async_update_entry(
+                    self._existing_entry,
+                    data={"token": token},
+                    options={CONF_USERNAME: username, CONF_PASSWORD: password},
                 )
+                self.hass.async_create_task(self.hass.config_entries.async_reload(self._existing_entry.entry_id))
+                return self.async_abort(reason="reauth_successful")
             else:
-                if self.reauth_mode:
-                    LOGGER.debug("async_step_user - Reauth save step")
-                    self.hass.config_entries.async_update_entry(self._existing_entry, data={"token": token}, options={CONF_USERNAME: username, CONF_PASSWORD: password})
-                    self.hass.async_create_task(self.hass.config_entries.async_reload(self._existing_entry.entry_id))
-                    return self.async_abort(reason="reauth_successful")
-                else:
-                    LOGGER.debug("async_step_user - Auth save step")
-                    return self.async_create_entry(
-                        title=username,
-                        data={"token": token},
-                        options={CONF_USERNAME: username, CONF_PASSWORD: password},
-                    )
+                LOGGER.debug("async_step_user - Auth save step")
+                return self.async_create_entry(
+                    title=username,
+                    data={"token": token},
+                    options={CONF_USERNAME: username, CONF_PASSWORD: password},
+                )
         except ClientConnectionError:
             LOGGER.debug("async_step_user - show form after exception - %s", traceback.format_exc())
             errors["base"] = "invalid_auth"
@@ -94,7 +94,7 @@ class MySmartBikeConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "unknown"
         except MySmartBikeAuthException:
             errors["base"] = "invalid_auth"
-        except Exception as err:
+        except Exception:
             LOGGER.debug("async_step_user - show form after exception - %s", traceback.format_exc())
             errors["base"] = "unknown"
 
@@ -104,6 +104,6 @@ class MySmartBikeConfigFlow(ConfigFlow, domain=DOMAIN):
         """Get new tokens for a config entry that can't authenticate."""
 
         self.reauth_mode = True
-        self._existing_entry = self.hass.config_entries.async_get_entry(self.context["entry_id"]) # type: ignore
+        self._existing_entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])  # type: ignore
 
         return self.async_show_form(step_id="user", data_schema=CONFIG_SCHEMA)

@@ -1,4 +1,5 @@
 """Simple HTTP Server to simulate the MySmartBike API."""
+
 from __future__ import annotations
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -11,20 +12,22 @@ HTTP_SERVER_IP = "0.0.0.0"
 HTTP_SERVER_PORT = 8001
 LOGGER = logging.getLogger(__package__)
 
-CHAOS_MONKEY = False
 
 class MySmartBikeSimulatorServer(BaseHTTPRequestHandler):
     """Simple HTTP Server to simulate the MySmartBike API."""
 
+    chaos = False
+
     def do_GET(self):
         """Answer get requests."""
 
-        if not CHAOS_MONKEY:
+        parsed = urlparse(self.path)
+
+        if not self.chaos:
             self.send_response(200)
             self.send_header("Content-type", "application/json;charset=UTF-8")
             self.end_headers()
 
-            parsed = urlparse(self.path)
             if parsed.path == "/api/v1/users/login":
                 if os.path.isfile("./api/v1/users/.login-200-dev"):
                     with open("./api/v1/users/.login-200-dev", "rb") as file:

@@ -4,6 +4,10 @@
 
 MySmartBike (Mahle powered e-bikes) platform as a Custom Component for Home Assistant.
 
+![image](https://github.com/user-attachments/assets/a3f0a3de-aa10-4dbd-add8-eced0c6b773a)
+
+
+
 IMPORTANT:
 
 - Please login once in the MySmartBike IOS or Android app before you install this component. Make sure you connected your bike(s) in the app

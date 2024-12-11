@@ -21,18 +21,17 @@ IMPORTANT:
 
 ## Installation
 
+### HACS
+
+- The integration is available via HACS (https://hacs.xyz/docs/use/)
+  - Search for "MySmartBike"
+- Restart HA, Refresh your HA Browser window
+
 ### Manual installation
 
 - This is a Home Assistant custom component (not an Add-in).
 - Download the folder custom_component and copy it into your Home-Assistant config folder.
 - [How to install a custom component?](https://www.google.com/search?q=how+to+install+custom+components+home+assistant)
-- Restart HA, Refresh your HA Browser window
-
-### HACS
-
-- Add a custom repository - [more here](https://hacs.xyz/docs/faq/custom_repositories/)
-  - URL: https://github.com/ReneNulschDE/ha-mysmartbike
-  - Type: Integration
 - Restart HA, Refresh your HA Browser window
 
 ## Configuration
@@ -77,7 +76,7 @@ logger:
 
 ## Open Items
 
-- List is too long as we are on version 0.0.1
+- Let me know via the issue section
 
 ## Useful links
 

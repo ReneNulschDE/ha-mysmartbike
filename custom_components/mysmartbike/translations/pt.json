@@ -1,0 +1,58 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "O componente já está configurado.",
+      "reauth_successful": "Reautenticação bem-sucedida! O componente está a ser recarregado."
+    },
+    "error": {
+      "cannot_connect": "Não foi possível ligar à API MySmartBike. Tente novamente mais tarde ou verifique os registos.",
+      "invalid_auth": "Falha na autenticação. Verifique se o email e a palavra-passe estão corretos.",
+      "unknown": "Ocorreu um erro desconhecido. Consulte os registos para mais detalhes."
+    },
+    "step": {
+      "user": {
+        "description": "Introduza os detalhes da sua conta MySmartBike",
+        "title": "Configurar a ligação MySmartBike",
+        "data": {
+          "username": "Endereço de email",
+          "password": "Palavra-passe"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "country_code": "Código do País",
+          "locale": "Localidade",
+          "excluded_bikes": "VINs excluídos (separados por vírgulas)"
+        },
+        "description": "Configure as suas opções. Algumas alterações requerem reiniciar o Home Assistant. É necessário reiniciar o HA após alterar o PIN.",
+        "title": "Opções MySmartBike"
+      }
+    },
+    "abort": {
+      "already_configured": "O componente já está configurado.",
+      "reauth_successful": "Reautenticação bem-sucedida! O componente está a ser recarregado."
+    }
+  },
+  "system_health": {
+    "info": {
+      "api_endpoint_reachable": "Ponto final da API MySmartBike acessível"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "odometry": {
+        "name": "Distância percorrida"
+      },
+      "state_of_charge": {
+        "name": "Estado de carga"
+      },
+      "remaining_capacity": {
+        "name": "Capacidade restante"
+      }
+    }
+  }
+}

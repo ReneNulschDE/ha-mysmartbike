@@ -82,7 +82,7 @@ class MySmartBikeWebApi:
 
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f'Bearer {self.token["access_token"]}',
+            "Authorization": f"Bearer {self.token['access_token']}",
         }
 
         _response = await self._request("get", "/api/v1/objects/me?limit=5", headers=headers)
@@ -150,7 +150,7 @@ class MySmartBikeWebApi:
         except ClientResponseError as err:
             LOGGER.debug(traceback.format_exc())
             if not ignore_errors:
-                if err.code == 504:
+                if err.code > 499:
                     raise MySmartBikeAPINotAvailable(traceback.format_exc()) from err
                 raise MySmartBikeAuthException from err
             return None

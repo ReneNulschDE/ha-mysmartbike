@@ -51,7 +51,7 @@ class MySmartBikeWebApi:
             return True, self.token
 
         LOGGER.debug("login: Token expired")
-        data = f"password={self._password}&contents_id=&email={self._username}"
+        data = {"password":self._password,"contents_id":"","email":self._username}
 
         headers = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"}
 

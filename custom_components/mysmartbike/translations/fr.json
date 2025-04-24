@@ -1,0 +1,58 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Le composant est déjà configuré.",
+            "reauth_successful": "Réauthentification réussie ! Rechargement du composant en cours."
+        },
+        "error": {
+            "cannot_connect": "Connection impossible à l'API MySmartBike. Réessayez ultérieurement ou consultez les journaux.",
+            "invalid_auth": "Échec d'authentification ! Vérifiez l'adresse e-mail et le mot de passe..",
+            "unknown": "Une erreur inconnue s'est produite. Consultez le journal pour plus de détails."
+        },
+        "step": {
+            "user": {
+                "description": "Saisissez les identifiants de votre compte MySmartBike",
+                "title": "Configuration connexion MySmartBike",
+                "data": {
+                    "username": "adresse courriel",
+                    "password": "mot de passe"
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "country_code": "Code du pays",
+                    "locale": "Localité",
+                    "excluded_bikes": "VINs exclue (séparé par des virgules)"
+                },
+                "description": "Configurez vos options. Certaines modifications nécessitent un redémarrage de Home Assistant. Vous devez redémarrer HA après le changement du code PIN.",
+                "title": "Options MySmartBike"
+            }
+        },
+        "abort": {
+            "already_configured": "Le composant est déjà configuré.",
+            "reauth_successful": "Réauthentification réussie ! Rechargement du composant en cours."
+        }
+    },
+    "system_health": {
+        "info": {
+            "api_endpoint_reachable": "Point de jonction de l'API MySmartBike accessible"
+        }
+    },
+    "entity": {
+        "sensor": {
+            "odometry": {
+                "name": "Distance parcourue"
+            },
+            "state_of_charge": {
+                "name": "État de charge"
+            },
+            "remaining_capacity": {
+                "name": "Capacité restante"
+            }
+        }
+    }
+}

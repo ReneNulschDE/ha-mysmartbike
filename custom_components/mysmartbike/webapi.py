@@ -207,7 +207,7 @@ class MySmartBikeWebApi:
                 model_name,
                 longitude,
                 latitude,
-                datetime.strptime(rbike.get("diagnosed_at"), "%Y-%m-%d %H:%M:%S"),
+                datetime.strptime(rbike.get("diagnosed_at", "1970-01-01 00:00:00"), "%Y-%m-%d %H:%M:%S"),
                 state_of_charge,
                 remaining_capacity,
                 rbike.get("range", None),

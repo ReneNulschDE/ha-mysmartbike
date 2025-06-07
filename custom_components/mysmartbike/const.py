@@ -23,11 +23,12 @@ USE_PROXY = False
 VERIFY_SSL = True
 SYSTEM_PROXY: str | None = None if not USE_PROXY else "http://192.168.178.68:9090"
 
-API_USER_AGENT = "ENDUSER/2.1.1 (com.mahle.sbs; build 9; IOS 17.3)"
+API_USER_AGENT_IOS = "ONE/2.4.2 (com.mahle.sbs; build 4; IOS 17.3)"
+API_USER_AGENT_ANDROID = "ONE/2.4.2 (com.mahle.sbs; build: 1812; IOS 17.3)"
 API_X_APP = "ENDUSER"
 API_X_PLATFORM = "IOS"
 API_X_THEME = "DARK"
-API_X_VERSION = "2.1.1"
+API_X_VERSION = "2.4.2"
 
 JSON_EXPORT_IGNORED_KEYS = (
     "access_token",

@@ -16,7 +16,17 @@ from aiohttp.client_exceptions import ClientError
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import API_BASE_URI, API_USER_AGENT, API_X_APP, API_X_THEME, API_X_VERSION, SYSTEM_PROXY, VERIFY_SSL
+from .const import (
+    API_BASE_URI,
+    API_USER_AGENT_ANDROID,
+    API_USER_AGENT_IOS,
+    API_X_APP,
+    API_X_PLATFORM,
+    API_X_THEME,
+    API_X_VERSION,
+    SYSTEM_PROXY,
+    VERIFY_SSL,
+)
 from .device import MySmartBikeDevice
 from .exceptions import MySmartBikeAPINotAvailable, MySmartBikeAuthException
 
@@ -33,6 +43,7 @@ class MySmartBikeWebApi:
         username: str,
         password: str,
         token: dict[str, Any],
+        device_type: str = "IOS",
     ) -> None:
         """Initialize."""
         self._session: ClientSession = session
@@ -41,6 +52,7 @@ class MySmartBikeWebApi:
         self.initialized: bool = False
         self.token: dict[str, Any] = token
         self.hass: HomeAssistant = hass
+        self.device_type: str = device_type
 
     async def login(self) -> tuple[bool, dict[str, Any]]:
         """Get the login token from MySmartBike cloud."""
@@ -51,7 +63,7 @@ class MySmartBikeWebApi:
             return True, self.token
 
         LOGGER.debug("login: Token expired")
-        data = {"password":self._password,"contents_id":"","email":self._username}
+        data = {"password": self._password, "contents_id": "", "email": self._username}
 
         headers = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"}
 
@@ -125,11 +137,11 @@ class MySmartBikeWebApi:
         kwargs["headers"].update(
             {
                 "Accept": "application/json",
-                "User-Agent": API_USER_AGENT,
+                "User-Agent": API_USER_AGENT_IOS if self.device_type == "IOS" else API_USER_AGENT_ANDROID,
                 "Accept-Language": "de-DE",
                 "X-Theme": API_X_THEME,
                 "X-App": API_X_APP,
-                # "X-Platform": API_X_PLATFORM,
+                "X-Platform": self.device_type,
                 "X-Version": API_X_VERSION,
             }
         )
@@ -190,7 +202,7 @@ class MySmartBikeWebApi:
 
             root_object = MySmartBikeDevice(
                 rbike["serial"],
-                rbike.get("odometry", -1),
+                rbike.get("odometry", None),
                 brand_alias,
                 model_name,
                 longitude,
@@ -198,6 +210,7 @@ class MySmartBikeWebApi:
                 datetime.strptime(rbike.get("diagnosed_at"), "%Y-%m-%d %H:%M:%S"),
                 state_of_charge,
                 remaining_capacity,
+                rbike.get("range", None),
             )
 
             root_objects[root_object.serial] = root_object

@@ -38,10 +38,11 @@ class MySmartBikeDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         username = config_entry.options[CONF_USERNAME]
         password = config_entry.options[CONF_PASSWORD]
         token = config_entry.data.get("token", {})
+        device_type = config_entry.options.get("device_type", "IOS")
 
         self.config_entry: ConfigEntry = config_entry
         self.hass: HomeAssistant = hass
-        self.webapi: MySmartBikeWebApi = MySmartBikeWebApi(hass, session, username, password, token)
+        self.webapi: MySmartBikeWebApi = MySmartBikeWebApi(hass, session, username, password, token, device_type)
 
         super().__init__(hass, LOGGER, name=DOMAIN, update_interval=UPDATE_INTERVAL)
 

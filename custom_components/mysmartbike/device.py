@@ -20,3 +20,4 @@ class MySmartBikeDevice:
     last_position_date: datetime
     state_of_charge: int | None
     remaining_capacity: int | None
+    range: int | None = None

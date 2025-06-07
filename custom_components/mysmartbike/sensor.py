@@ -13,12 +13,7 @@ import logging
 from typing import Any, cast
 
 from homeassistant import util
-from homeassistant.components.sensor import (
-    SensorDeviceClass,
-    SensorEntity,
-    SensorEntityDescription,
-    SensorStateClass,
-)
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorEntityDescription, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE, UnitOfLength, UnitOfPower
 from homeassistant.core import HomeAssistant, callback
@@ -55,8 +50,17 @@ SENSORS: tuple[MySmartBikeSensorDescription, ...] = (
         device_class=SensorDeviceClass.DISTANCE,
         state_class=SensorStateClass.MEASUREMENT,
         translation_key="odometry",
-        value_fn=lambda data: cast(int, data) / 1000,
+        value_fn=lambda data: None if data is None else cast(int, data) / 1000,
         exists_fn=lambda device: bool(device.odometry),
+    ),  # type: ignore[call-arg]
+    MySmartBikeSensorDescription(
+        key="range",
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
+        device_class=SensorDeviceClass.DISTANCE,
+        state_class=SensorStateClass.MEASUREMENT,
+        translation_key="range",
+        value_fn=lambda data: None if data is None else cast(int, data) / 1000,
+        exists_fn=lambda device: bool(device.range),
     ),  # type: ignore[call-arg]
     MySmartBikeSensorDescription(
         key="state_of_charge",

@@ -21,7 +21,6 @@ from .const import (
     API_USER_AGENT_ANDROID,
     API_USER_AGENT_IOS,
     API_X_APP,
-    API_X_PLATFORM,
     API_X_THEME,
     API_X_VERSION,
     SYSTEM_PROXY,

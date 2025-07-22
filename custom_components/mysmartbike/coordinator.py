@@ -8,9 +8,10 @@ import logging
 from typing import Any
 
 from aiohttp import ClientResponseError, ClientSession
+from awesomeversion import AwesomeVersion
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
+from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, __version__ as HAVERSION
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
@@ -20,6 +21,9 @@ from .exceptions import MySmartBikeAPINotAvailable, MySmartBikeAuthException
 from .webapi import MySmartBikeWebApi
 
 LOGGER = logging.getLogger(__name__)
+# Version threshold for config_entry setting in options flow
+# See: https://github.com/home-assistant/core/pull/127980
+HA_DATACOORDINATOR_CONTEXTVAR_VERSION_THRESHOLD = "2025.07.99"
 
 
 class MySmartBikeDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -44,7 +48,10 @@ class MySmartBikeDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self.hass: HomeAssistant = hass
         self.webapi: MySmartBikeWebApi = MySmartBikeWebApi(hass, session, username, password, token, device_type)
 
-        super().__init__(hass, LOGGER, name=DOMAIN, update_interval=UPDATE_INTERVAL)
+        if AwesomeVersion(HAVERSION) < HA_DATACOORDINATOR_CONTEXTVAR_VERSION_THRESHOLD:
+            super().__init__(hass, LOGGER, name=DOMAIN, update_interval=UPDATE_INTERVAL)
+        else:
+            super().__init__(hass, LOGGER, name=DOMAIN, config_entry=config_entry, update_interval=UPDATE_INTERVAL)
 
     async def async_init(self) -> bool:
         """Addition init async."""

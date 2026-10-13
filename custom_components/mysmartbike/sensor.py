@@ -51,7 +51,7 @@ SENSORS: tuple[MySmartBikeSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         translation_key="odometry",
         value_fn=lambda data: None if data is None else cast(int, data) / 1000,
-        exists_fn=lambda device: bool(device.odometry),
+        exists_fn=lambda device: device.odometry is not None,
     ),  # type: ignore[call-arg]
     MySmartBikeSensorDescription(
         key="range",
@@ -60,7 +60,7 @@ SENSORS: tuple[MySmartBikeSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         translation_key="range",
         value_fn=lambda data: None if data is None else cast(int, data) / 1000,
-        exists_fn=lambda device: bool(device.range),
+        exists_fn=lambda device: device.range is not None,
     ),  # type: ignore[call-arg]
     MySmartBikeSensorDescription(
         key="state_of_charge",
@@ -69,7 +69,7 @@ SENSORS: tuple[MySmartBikeSensorDescription, ...] = (
         device_class=SensorDeviceClass.BATTERY,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: cast(int, data),
-        exists_fn=lambda device: bool(device.state_of_charge),
+        exists_fn=lambda device: device.state_of_charge is not None,
     ),  # type: ignore[call-arg]
     MySmartBikeSensorDescription(
         key="remaining_capacity",
@@ -78,7 +78,7 @@ SENSORS: tuple[MySmartBikeSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         translation_key="remaining_capacity",
         value_fn=lambda data: cast(int, data),
-        exists_fn=lambda device: bool(device.remaining_capacity),
+        exists_fn=lambda device: device.remaining_capacity is not None,
     ),  # type: ignore[call-arg]
 )
 
